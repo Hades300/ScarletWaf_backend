@@ -7,15 +7,18 @@ import (
 	"scarlet/common"
 )
 
-func OnJSONError(c *gin.Context, err error) {
+func OnJSONError(c *gin.Context, err error) bool {
 	if err != nil {
 		Failure(c, "Error Binding JSON Data"+err.Error(), nil)
+		return true
 	}
+	return false
 }
 
-func OnValidateError(c *gin.Context, err error) {
+func OnValidateError(c *gin.Context, err error) bool {
 	if val, ok := err.(validation.InternalError); ok {
 		panic(val)
+		return true
 	}
 	if err != nil {
 		data, _ := json.Marshal(err)
@@ -25,7 +28,9 @@ func OnValidateError(c *gin.Context, err error) {
 			Data: string(data),
 		})
 		c.Abort()
+		return true
 	}
+	return false
 }
 
 func Success(c *gin.Context, msg string, data interface{}) {

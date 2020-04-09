@@ -23,11 +23,15 @@ func WafStatus(c *gin.Context) {
 	user = session["user"].(common.User)
 	switchForm := common.SwitchOperation{}
 	err := c.ShouldBindJSON(&switchForm)
-	OnJSONError(c, err)
+	if OnJSONError(c, err) {
+		return
+	}
 	switchForm.ConfigName = common.AbbrMap["waf"]
 	switchForm.Format()
 	err = switchForm.Validate()
-	OnValidateError(c, err)
+	if OnValidateError(c, err) {
+		return
+	}
 	if !serverService.Own(user.ID, switchForm.ServerID) {
 		Failure(c, "越权操作", nil)
 	} else {
@@ -50,16 +54,21 @@ func ChangeSwitch(c *gin.Context) {
 	user = session["user"].(common.User)
 	switchForm := common.SwitchOperation{}
 	err := c.ShouldBindJSON(&switchForm)
-	OnJSONError(c, err)
+	if OnJSONError(c, err) {
+		return
+	}
 	switchForm.ConfigName = common.AbbrMap[switchForm.ConfigName]
 	switchForm.Format()
 	err = switchForm.Validate()
-	OnValidateError(c, err)
+	if OnValidateError(c, err) {
+		return
+	}
 	if !serverService.Own(user.ID, switchForm.ServerID) {
 		Failure(c, "越权操作", nil)
-		if switchForm.URIID != 0 && !uriService.Own(switchForm.URIID, switchForm.ServerID) {
-			Failure(c, "越权操作", nil)
-		}
+		return
+	} else if switchForm.URIID != 0 && !uriService.Own(switchForm.URIID, switchForm.ServerID) {
+		Failure(c, "越权操作", nil)
+		return
 	} else {
 		configService.FunctionSwitch(switchForm)
 		Success(c, "修改成功", nil)
@@ -82,16 +91,22 @@ func GetSwitch(c *gin.Context) {
 	user = session["user"].(common.User)
 	switchForm := common.SwitchOperation{}
 	err := c.ShouldBindJSON(&switchForm)
-	OnJSONError(c, err)
+	if OnJSONError(c, err) {
+		return
+	}
 	switchForm.ConfigName = common.AbbrMap[switchForm.ConfigName]
 	switchForm.Format()
 	err = switchForm.Validate()
-	OnValidateError(c, err)
+	if OnValidateError(c, err) {
+		return
+	}
 	if !serverService.Own(user.ID, switchForm.ServerID) {
 		Failure(c, "越权操作", nil)
+		return
 	}
 	if switchForm.URIID != 0 && !uriService.Own(switchForm.URIID, switchForm.ServerID) {
 		Failure(c, "越权操作", nil)
+		return
 	}
 	var res interface{}
 	if switchForm.URIID != 0 {

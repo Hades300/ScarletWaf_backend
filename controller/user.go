@@ -89,29 +89,20 @@ func UserLogin(c *gin.Context) {
 	var user common.User
 	err := c.ShouldBindJSON(&user)
 	val, ok := c.Get("session")
-	if err != nil {
-		c.JSON(400, common.DataResponse{
-			Code: 400,
-			Msg:  "Error Binding JSON data" + err.Error(),
-			Data: nil,
-		})
+	if OnJSONError(c, err) {
+		return
 	}
 	session := val.(jwt.MapClaims)
 	user, ok = userService.Auth(user)
 	if !ok {
-		c.JSON(400, common.DataResponse{
-			Code: 400,
-			Msg:  "用户名或密码错误",
-		})
+		Failure(c, "用户名或密码错误", nil)
+		return
 	} else {
 		session["login"] = true
 		session["user_id"] = user.ID
 		saveSession(c, session)
 		c.Set("session", session)
-		c.JSON(200, common.DataResponse{
-			Code: 200,
-			Msg:  "登录成功",
-		})
+		Success(c, "登录成功", nil)
 	}
 
 }
