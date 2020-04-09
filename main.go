@@ -1,6 +1,7 @@
 package main
 
 import (
+	"github.com/gin-contrib/cors"
 	"github.com/gin-gonic/gin"
 	_ "github.com/spf13/viper"
 	swaggerFiles "github.com/swaggo/files"
@@ -8,6 +9,7 @@ import (
 	"scarlet/controller"
 	_ "scarlet/docs"
 	"scarlet/tool"
+	"time"
 )
 
 // @title Scarlet Backend
@@ -67,6 +69,19 @@ func main() {
 	userGroup.POST("/switch/get", controller.GetSwitch)
 
 	r.GET("/swagger/*any", ginSwagger.WrapHandler(swaggerFiles.Handler))
+
+	r.Use(cors.New(cors.Config{
+		AllowOrigins:     []string{"*"},
+		AllowMethods:     []string{"POST", "GET", "OPTION"},
+		AllowHeaders:     []string{"Origin"},
+		ExposeHeaders:    []string{"Content-Length", controller.JWTNAME},
+		AllowCredentials: true,
+		AllowOriginFunc: func(origin string) bool {
+			return origin == "https://github.com"
+		},
+		MaxAge: 12 * time.Hour,
+	}))
+
 	if err := r.Run(":8080"); err != nil {
 		tool.GetLogger().Fatal("Address Already Used")
 	}

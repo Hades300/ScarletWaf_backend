@@ -69,7 +69,7 @@ func GetRules(c *gin.Context) {
 //@Accept json
 //@Produce json
 //@Param rulePageForm body common.RulePage true "必须给定server_id ，uri_id可选 type为get\post\ua\header\cookie之一"
-//@Success 200 {object} common.OperationResponse true
+//@Success 200 {object} common.DataResponse true
 //@Response 400 common.DataResponse true
 //@Router /user/rule/delete [POST]
 func DeleteRule(c *gin.Context) {
@@ -104,7 +104,7 @@ func DeleteRule(c *gin.Context) {
 		return
 	} else {
 		ruleService.Delete(rule)
-		c.JSON(200, common.OperationResponse{
+		c.JSON(200, common.DataResponse{
 			Code: 200,
 			Msg:  "删除成功",
 		})
@@ -112,14 +112,14 @@ func DeleteRule(c *gin.Context) {
 	}
 	// 权限验证
 	if ok := serverService.Own(user.ID, rule.ServerID) && uriService.Own(rule.URIID, rule.ServerID); !ok {
-		c.JSON(401, common.OperationResponse{
+		c.JSON(401, common.DataResponse{
 			Code: 401,
 			Msg:  "越权操作",
 		})
 		return
 	} else {
 		ruleService.Delete(rule)
-		c.JSON(200, common.OperationResponse{
+		c.JSON(200, common.DataResponse{
 			Code: 200,
 			Msg:  "删除成功",
 		})
@@ -133,7 +133,7 @@ func DeleteRule(c *gin.Context) {
 //@Accept json
 //@Produce json
 //@Param rulePageForm body common.RulePage true "必须给定server_id 、content，uri_id可选 type为get\post\ua\header\cookie之一"
-//@Success 200 {object} common.OperationResponse true
+//@Success 200 {object} common.DataResponse true
 //@Response 400 common.DataResponse true
 //@Router /user/rule/add [POST]
 func AddRule(c *gin.Context) {
@@ -175,7 +175,7 @@ func AddRule(c *gin.Context) {
 
 	// 权限验证
 	if ok := serverService.Own(user.ID, addRuleForm.ServerID) && uriService.Own(addRuleForm.URIID, addRuleForm.ServerID); !ok {
-		c.JSON(401, common.OperationResponse{
+		c.JSON(401, common.DataResponse{
 			Code: 401,
 			Msg:  "越权操作",
 		})
@@ -196,7 +196,7 @@ func AddRule(c *gin.Context) {
 		}
 	}
 	ruleService.MustAdd(rules)
-	c.JSON(200, common.OperationResponse{
+	c.JSON(200, common.DataResponse{
 		Code: 200,
 		Msg:  "添加成功",
 	})

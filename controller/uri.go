@@ -41,7 +41,7 @@ func AddURI(c *gin.Context) {
 			return
 		}
 		if !serverService.Own(user.ID, uri.ServerID) {
-			c.JSON(401, common.OperationResponse{
+			c.JSON(401, common.DataResponse{
 				Code: 401,
 				Msg:  "越权操作",
 			})
@@ -50,13 +50,13 @@ func AddURI(c *gin.Context) {
 			server := serverService.Get(uri.ServerID)
 			uri.Host = server.Domain
 			uriService.Add(uri)
-			c.JSON(200, common.OperationResponse{
+			c.JSON(200, common.DataResponse{
 				Code: 200,
 				Msg:  "添加成功",
 			})
 			return
 		} else {
-			c.JSON(200, common.OperationResponse{
+			c.JSON(200, common.DataResponse{
 				Code: 400,
 				Msg:  "已存在",
 			})
@@ -69,7 +69,7 @@ func AddURI(c *gin.Context) {
 // @Accept json
 // @Produce json
 // @Param uri body common.URI true "server_id、id必填"
-// @Success 200 {object} common.OperationResponse
+// @Success 200 {object} common.DataResponse
 // @Failure 400 {object} common.DataResponse
 // @Router /user/uri/delete [post] 'Login required'
 func DeleteURI(c *gin.Context) {
@@ -98,14 +98,14 @@ func DeleteURI(c *gin.Context) {
 		}
 		if serverService.Own(user.ID, uri.ServerID) && uriService.Own(uri.ID, uri.ServerID) {
 			uriService.Delete(uri)
-			c.JSON(200, common.OperationResponse{
+			c.JSON(200, common.DataResponse{
 				Code: 200,
 				Msg:  "删除成功",
 			})
 
 			return
 		} else {
-			c.JSON(401, common.OperationResponse{
+			c.JSON(401, common.DataResponse{
 				Code: 401,
 				Msg:  "越权操作",
 			})

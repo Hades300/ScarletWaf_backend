@@ -1,7 +1,6 @@
 package controller
 
 import (
-	"encoding/json"
 	"github.com/dgrijalva/jwt-go"
 	"github.com/gin-gonic/gin"
 	"github.com/sirupsen/logrus"
@@ -33,7 +32,7 @@ func GetServers(c *gin.Context) {
 // @Accept json
 // @Produce json
 // @Param servers body  common.GetServerForm true "server_id为必要"
-// @Success 200 {object} common.OperationResponse
+// @Success 200 {object} common.DataResponse
 // @Failure 400 {object} common.DataResponse
 // @Router /user/server/delete [post] 'Login required'
 func DeleteServer(c *gin.Context) {
@@ -51,24 +50,16 @@ func DeleteServer(c *gin.Context) {
 		return
 	}
 	err = form.Validate()
-	if err != nil {
-		data, _ := json.Marshal(err)
-		c.JSON(406, common.DataResponse{
-			Code: 406,
-			Msg:  "表单不合法",
-			Data: string(data),
-		})
-		return
-	}
+	OnValidateError(c, err)
 	if serverService.Own(user.ID, form.ServerID) {
 		serverService.Delete(form.ServerID)
-		c.JSON(200, common.OperationResponse{
+		c.JSON(200, common.DataResponse{
 			Code: 200,
 			Msg:  "删除成功",
 		})
 		return
 	} else {
-		c.JSON(401, common.OperationResponse{
+		c.JSON(401, common.DataResponse{
 			Code: 401,
 			Msg:  "越权操作",
 		})
@@ -95,7 +86,7 @@ func AddServer(c *gin.Context) {
 	user = session["user"].(common.User)
 	user.Servers = servers
 	userService.UpdateServers(user)
-	c.JSON(200, common.OperationResponse{
+	c.JSON(200, common.DataResponse{
 		Code: 200,
 		Msg:  "添加成功",
 	})

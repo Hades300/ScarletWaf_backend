@@ -22,9 +22,9 @@ var ruleService = service.NewRuleService()
 // @Tags User
 // @Accept json
 // @Produce json
-// @Param user body common.OperationResponse true "注册的表单"
-// @Success 200 {object} common.OperationResponse
-// @Failure 400 {object} common.OperationResponse
+// @Param user body common.DataResponse true "注册的表单"
+// @Success 200 {object} common.DataResponse
+// @Failure 400 {object} common.DataResponse
 // @Router /user [post]
 func AddUser(c *gin.Context) {
 	user := common.User{}
@@ -99,7 +99,7 @@ func UserLogin(c *gin.Context) {
 	session := val.(jwt.MapClaims)
 	user, ok = userService.Auth(user)
 	if !ok {
-		c.JSON(400, common.OperationResponse{
+		c.JSON(400, common.DataResponse{
 			Code: 400,
 			Msg:  "用户名或密码错误",
 		})
