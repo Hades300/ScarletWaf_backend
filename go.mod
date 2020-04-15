@@ -3,6 +3,7 @@ module scarlet
 go 1.13
 
 require (
+	github.com/BurntSushi/toml v0.3.1
 	github.com/alecthomas/template v0.0.0-20190718012654-fb15b899a751
 	github.com/dgrijalva/jwt-go v3.2.0+incompatible
 	github.com/gin-contrib/cors v1.3.1
@@ -12,6 +13,7 @@ require (
 	github.com/go-ozzo/ozzo-validation/v4 v4.1.0
 	github.com/go-sql-driver/mysql v1.4.1
 	github.com/gomodule/redigo v2.0.0+incompatible
+	github.com/gorilla/websocket v1.4.0
 	github.com/jinzhu/gorm v1.9.12
 	github.com/mailru/easyjson v0.7.1 // indirect
 	github.com/nicksnyder/go-i18n/v2 v2.0.3
