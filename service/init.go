@@ -1,6 +1,7 @@
 package service
 
 import (
+	"fmt"
 	"github.com/gomodule/redigo/redis"
 	"github.com/jinzhu/gorm"
 	"scarlet/tool"
@@ -9,14 +10,16 @@ import (
 
 var (
 	redisPool        = newPool()
-	mysqlClient, err = gorm.Open("mysql", "scarlet:scarlet@(127.0.0.1:3306)/scarlet?charset=utf8&parseTime=True&loc=Local")
+	mysqlLink        = fmt.Sprintf("%s:%s@(%s)/%s?charset=utf8&parseTime=True&loc=Local", conf.Mysql.UserName, conf.Mysql.Password, conf.Mysql.Addr, conf.Mysql.Database)
+	mysqlClient, err = gorm.Open("mysql", mysqlLink)
 	serverService    = NewServerService()
+	conf             = tool.GetConfig()
 )
 
 func newPool() *redis.Pool {
 	return &redis.Pool{
 		Dial: func() (c redis.Conn, err error) {
-			return redis.Dial("tcp", "localhost:6379", redis.DialPassword("123456"))
+			return redis.Dial("tcp", conf.Redis.Addr, redis.DialPassword(conf.Redis.Password))
 		},
 		MaxIdle:     3,
 		IdleTimeout: 240 * time.Second,

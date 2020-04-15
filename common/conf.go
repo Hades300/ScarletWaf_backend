@@ -10,6 +10,7 @@ type MysqlConf struct {
 type RedisConf struct {
 	Addr     string `toml:"addr"`
 	Database int    `toml:"database"`
+	Password string `toml:"password"`
 }
 
 type Conf struct {
