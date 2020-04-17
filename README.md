@@ -17,6 +17,11 @@ The backend of scarlet
 
 ### ChangeLog
 
+
+#### 4-17
+
+- 删除所有因为异常数据导致的Fatal
+
 #### 4-15
 
 - 增加配置读写
