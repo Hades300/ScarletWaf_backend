@@ -17,6 +17,11 @@ The backend of scarlet
 
 ### ChangeLog
 
+#### 4-18
+
+- 补上了自动迁移数据库
+- 移动了跨源中间件的位置（防止过早的abort导致其未被调用
+
 
 #### 4-17
 

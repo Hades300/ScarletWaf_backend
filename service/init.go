@@ -4,6 +4,7 @@ import (
 	"fmt"
 	"github.com/gomodule/redigo/redis"
 	"github.com/jinzhu/gorm"
+	"scarlet/common"
 	"scarlet/tool"
 	"time"
 )
@@ -30,5 +31,6 @@ func init() {
 	if err != nil {
 		tool.GetLogger().Fatal(err)
 	}
+	mysqlClient.AutoMigrate(&common.User{}, &common.URI{}, &common.Server{})
 	mysqlClient.SetLogger(tool.GetLogger().WithField("database", "mysql"))
 }
