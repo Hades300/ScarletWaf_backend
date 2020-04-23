@@ -102,7 +102,7 @@ type SwitchOperation struct {
 	ConfigStatus bool   `json:"config_value"`
 }
 
-var AbbrMap = map[string]string{"waf": "waf_status", "get": "get_args_check", "post": "post_args_check", "cookie": "cookie_check", "ua": "ua_check", "blacklist": "ip_blacklist", "whitelist": "ip_whitelist", "cc": "cc_defense", "sql": "libsqli_token_check"}
+var AbbrMap = map[string]string{"waf": "waf_status", "get": "get_args_check", "post": "post_args_check", "cookie": "cookie_check", "ua": "ua_check", "blackip": "ip_blacklist", "whiteip": "ip_whitelist", "cc": "cc_defense", "sql": "libsqli_token_check"}
 
 func (s SwitchOperation) Validate() error {
 	return validation.ValidateStruct(&s,
@@ -117,7 +117,7 @@ func RuleLimit(item interface{}) error {
 	for _, val := range AbbrMap {
 		allowed += "," + val
 	}
-	if !strings.Contains(configName, allowed) {
+	if !strings.Contains(allowed, configName) {
 		return errors.New("未定义规则")
 	} else {
 		return nil

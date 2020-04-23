@@ -73,7 +73,7 @@ func main() {
 
 	go GraceFullyShutDown()
 
-	if err := r.Run(":8080"); err != nil {
+	if err := r.Run(":8081"); err != nil {
 		tool.GetLogger().Fatal("Address Already Used")
 	}
 }
