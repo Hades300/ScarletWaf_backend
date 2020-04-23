@@ -31,6 +31,6 @@ func init() {
 	if err != nil {
 		tool.GetLogger().Fatal(err)
 	}
-	mysqlClient.AutoMigrate(&common.User{}, &common.URI{}, &common.Server{})
 	mysqlClient.SetLogger(tool.GetLogger().WithField("database", "mysql"))
+	mysqlClient.AutoMigrate(&common.User{}, &common.URI{}, &common.Server{})
 }

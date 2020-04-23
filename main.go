@@ -19,7 +19,7 @@ import (
 // @title Scarlet Backend
 // @version 1.0
 // @description This is a sample server celler server.
-// @termsOfService http://swagger.io/terms/
+// @termsOfService http://swagger.io/terms/w
 
 // @contact.name API Support
 // @contact.url http://www.swagger.io/support
@@ -35,16 +35,16 @@ func main() {
 	r := gin.Default()
 	r.Use(cors.New(cors.Config{
 		AllowOrigins:     []string{"*"},
-		AllowMethods:     []string{"POST", "GET", "OPTION"},
-		AllowHeaders:     []string{"Origin"},
-		ExposeHeaders:    []string{"Content-Length", controller.JWTNAME},
+		AllowMethods:     []string{"POST", "GET", "OPTIONS"},
+		AllowHeaders:     []string{"Origin", controller.JWTNAME, "Set-Cookie", "Cookie", "Content-Type"},
+		ExposeHeaders:    []string{"Content-Length", controller.JWTNAME, "Set-Cookie", "Cookie", "Content-Type"},
 		AllowCredentials: true,
 		AllowOriginFunc: func(origin string) bool {
 			return origin == "https://github.com"
 		},
 		MaxAge: 12 * time.Hour,
 	}))
-	r.Use(controller.JWT())
+	r.Use(controller.JWT_TOKEN())
 	r.POST("/user", controller.AddUser)
 	r.POST("/login", controller.UserLogin)
 

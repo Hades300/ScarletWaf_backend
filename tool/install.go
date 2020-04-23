@@ -14,7 +14,7 @@ import (
 var temp = `
 [redis]
 addr = "127.0.0.1:6379"
-password = "123456"
+password = ""
 
 [mysql]
 addr = "127.0.0.1:3306"
@@ -32,6 +32,7 @@ func init() {
 		fmt.Printf("%+v\n", Conf)
 	} else {
 		Install()
+		Conf = readConf()
 	}
 }
 
@@ -71,7 +72,7 @@ func Install() {
 	if input, useDefault = readFromStdin(); !useDefault {
 		conf.Redis.Addr = input
 	}
-	fmt.Printf("[+] Redis 密码(默认为: 123456):")
+	fmt.Printf("[+] Redis 密码(默认为空):")
 	if input, useDefault = readFromStdin(); !useDefault {
 		conf.Redis.Password = input
 	}

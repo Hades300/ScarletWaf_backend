@@ -4,6 +4,7 @@ import (
 	"errors"
 	validation "github.com/go-ozzo/ozzo-validation/v4"
 	"github.com/go-ozzo/ozzo-validation/v4/is"
+	"strings"
 )
 
 type RegisterForm struct {
@@ -112,15 +113,15 @@ func (s SwitchOperation) Validate() error {
 
 func RuleLimit(item interface{}) error {
 	configName := item.(string)
-	if configName == "" {
+	allowed := ""
+	for _, val := range AbbrMap {
+		allowed += "," + val
+	}
+	if !strings.Contains(configName, allowed) {
+		return errors.New("未定义规则")
+	} else {
 		return nil
 	}
-	for _, val := range AbbrMap {
-		if configName == val {
-			return nil
-		}
-	}
-	return errors.New("未定义规则")
 }
 
 func (s *SwitchOperation) Format() {
@@ -128,4 +129,15 @@ func (s *SwitchOperation) Format() {
 		s.ConfigName = val
 	}
 	return
+}
+
+type GetSwitchForm struct {
+	ServerID uint `json:"server_id"`
+	URIID    uint `json:"uri_id"`
+}
+
+func (g GetSwitchForm) Validate() error {
+	return validation.ValidateStruct(&g,
+		validation.Field(&g.ServerID, validation.Required.Error("必须声明服务器ID")),
+	)
 }
