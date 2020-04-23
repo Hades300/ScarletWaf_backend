@@ -20,7 +20,10 @@ password = ""
 addr = "127.0.0.1:3306"
 database = "scarlet"
 password = "123456"
-username = "scarlet"`
+username = "scarlet"
+
+[scarlet]
+addr = "0.0.0.0:8080"`
 
 var PROJECT_DIR, _ = os.Getwd()
 var Conf common.Conf
@@ -75,6 +78,10 @@ func Install() {
 	fmt.Printf("[+] Redis 密码(默认为空):")
 	if input, useDefault = readFromStdin(); !useDefault {
 		conf.Redis.Password = input
+	}
+	fmt.Printf("[+] Scarlet 运行端口(默认为0.0.0.0:8080):")
+	if input, useDefault = readFromStdin(); !useDefault {
+		conf.Scarlet.Addr = input
 	}
 	writeConf(conf)
 	fmt.Printf("[+] 配置写入成功\n")
