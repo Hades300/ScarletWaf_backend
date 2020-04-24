@@ -66,6 +66,7 @@ func main() {
 	userGroup.POST("/rule/add", controller.AddRule)
 
 	userGroup.POST("/switch/waf", controller.WafStatus)
+	userGroup.GET("/switch/waf", controller.GetWafStatus)
 	userGroup.POST("/switch/change", controller.ChangeSwitch)
 	userGroup.POST("/switch/get", controller.GetSwitch)
 

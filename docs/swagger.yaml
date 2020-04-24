@@ -117,7 +117,7 @@ info:
   license:
     name: Apache 2.0
     url: http://www.apache.org/licenses/LICENSE-2.0.html
-  termsOfService: http://swagger.io/terms/
+  termsOfService: http://swagger.io/terms/w
   title: Scarlet Backend
   version: "1.0"
 paths:
@@ -324,6 +324,23 @@ paths:
       tags:
       - switch
   /user/switch/waf:
+    get:
+      parameters:
+      - description: 服务器id
+        in: query
+        name: server_id
+        required: true
+        type: string
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/common.DataResponse'
+      summary: 查询waf开关
+      tags:
+      - switch
     post:
       consumes:
       - application/json

@@ -18,7 +18,7 @@ var doc = `{
     "info": {
         "description": "{{.Description}}",
         "title": "{{.Title}}",
-        "termsOfService": "http://swagger.io/terms/",
+        "termsOfService": "http://swagger.io/terms/w",
         "contact": {
             "name": "API Support",
             "url": "http://www.swagger.io/support",
@@ -357,6 +357,32 @@ var doc = `{
             }
         },
         "/user/switch/waf": {
+            "get": {
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "switch"
+                ],
+                "summary": "查询waf开关",
+                "parameters": [
+                    {
+                        "type": "string",
+                        "description": "服务器id",
+                        "name": "server_id",
+                        "in": "query",
+                        "required": true
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "$ref": "#/definitions/common.DataResponse"
+                        }
+                    }
+                }
+            },
             "post": {
                 "consumes": [
                     "application/json"

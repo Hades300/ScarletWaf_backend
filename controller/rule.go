@@ -23,6 +23,11 @@ func GetRules(c *gin.Context) {
 	if OnJSONError(c, err) {
 		return
 	}
+	rulePage.Format()
+	err = rulePage.Validate()
+	if OnValidateError(c, err) {
+		return
+	}
 	if serverService.Own(user.ID, rulePage.ServerID) {
 		if rulePage.URIID != 0 && !uriService.Own(rulePage.URIID, rulePage.ServerID) {
 			Failure(c, "越权操作", nil)
@@ -95,6 +100,7 @@ func AddRule(c *gin.Context) {
 	user = session["user"].(common.User)
 	addRuleForm := common.AddRuleForm{}
 	err := c.ShouldBindJSON(&addRuleForm)
+	addRuleForm.Format()
 	rules := addRuleForm.Rules
 	if OnJSONError(c, err) {
 		return

@@ -24,6 +24,16 @@ func (c *ConfigService) WafStatus(operation common.SwitchOperation) {
 	}
 }
 
+func (c *ConfigService) GetWafStatus(form common.GetWafStatusForm) bool {
+	server := serverService.Get(form.ServerID)
+	key := tool.BaseConfigKeyGen(server.Domain)
+	val, err := redis.Bool(redisPool.Get().Do("hget", key, "waf_status"))
+	if err != nil {
+		panic(err)
+	}
+	return val
+}
+
 // 根据... 写入各个功能开关状态
 func (c *ConfigService) FunctionSwitch(operation common.SwitchOperation) {
 	server := serverService.Get(operation.ServerID)

@@ -47,6 +47,19 @@ type RulePage struct {
 	URIID    uint   `json:"uri_id"`
 }
 
+func (r *RulePage) Format() {
+	r.Flag = strings.ToUpper(r.Flag)
+	r.Type = strings.ToUpper(r.Type)
+}
+
+func (r RulePage) Validate() error {
+	return validation.ValidateStruct(&r,
+		validation.Field(&r.ServerID, validation.Required.Error("server_id是必填的")),
+		validation.Field(&r.Flag, validation.In("base", "BASE", "custom", "CUSTOM").Error("类型必须是base或者custom之一")),
+		validation.Field(&r.Type, validation.In("GET", "POST", "BLACKIP", "COOKIE", "UA", "HEADER", "WHITEIP").Error("规则类型不合法")),
+	)
+}
+
 // 必要字段 "Content" "ServerID" "Flag" "Type"
 // 可选 "URIID"
 type DeleteRuleForm struct {
@@ -81,6 +94,11 @@ func (a AddRuleForm) Validate() error {
 func (a *AddRuleForm) Format() {
 	for index, rule := range a.Rules {
 		rule.Format()
+		if a.URIID != 0 {
+			rule.Flag = "CUSTOM"
+		} else {
+			rule.Flag = "BASE"
+		}
 		a.Rules[index] = rule
 	}
 }
@@ -102,8 +120,6 @@ type SwitchOperation struct {
 	ConfigStatus bool   `json:"config_value"`
 }
 
-var AbbrMap = map[string]string{"waf": "waf_status", "get": "get_args_check", "post": "post_args_check", "cookie": "cookie_check", "ua": "ua_check", "blackip": "ip_blacklist", "whiteip": "ip_whitelist", "cc": "cc_defense", "sql": "libsqli_token_check"}
-
 func (s SwitchOperation) Validate() error {
 	return validation.ValidateStruct(&s,
 		validation.Field(&s.ServerID, validation.Required.Error("必须声明服务器ID")),
@@ -114,7 +130,7 @@ func (s SwitchOperation) Validate() error {
 func RuleLimit(item interface{}) error {
 	configName := item.(string)
 	allowed := ""
-	for _, val := range AbbrMap {
+	for _, val := range AbbrFuncMap {
 		allowed += "," + val
 	}
 	if !strings.Contains(allowed, configName) {
@@ -125,7 +141,7 @@ func RuleLimit(item interface{}) error {
 }
 
 func (s *SwitchOperation) Format() {
-	if val, ok := AbbrMap[s.ConfigName]; ok {
+	if val, ok := AbbrFuncMap[s.ConfigName]; ok {
 		s.ConfigName = val
 	}
 	return
@@ -137,6 +153,16 @@ type GetSwitchForm struct {
 }
 
 func (g GetSwitchForm) Validate() error {
+	return validation.ValidateStruct(&g,
+		validation.Field(&g.ServerID, validation.Required.Error("必须声明服务器ID")),
+	)
+}
+
+type GetWafStatusForm struct {
+	ServerID uint `json:"server_id" form:"server_id"`
+}
+
+func (g GetWafStatusForm) Validate() error {
 	return validation.ValidateStruct(&g,
 		validation.Field(&g.ServerID, validation.Required.Error("必须声明服务器ID")),
 	)

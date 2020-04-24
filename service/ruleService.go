@@ -14,7 +14,7 @@ func NewRuleService() *RuleService {
 }
 
 func (r *RuleService) GetRulePage(page common.RulePage) []common.Rule {
-	var results []common.Rule
+	results := []common.Rule{}
 	switch page.Flag {
 	case "BASE":
 		server := serverService.Get(page.ServerID)

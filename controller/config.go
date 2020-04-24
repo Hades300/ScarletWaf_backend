@@ -27,7 +27,7 @@ func WafStatus(c *gin.Context) {
 	if OnJSONError(c, err) {
 		return
 	}
-	switchForm.ConfigName = common.AbbrMap["waf"]
+	switchForm.ConfigName = common.AbbrFuncMap["waf"]
 	switchForm.Format()
 	err = switchForm.Validate()
 	if OnValidateError(c, err) {
@@ -39,6 +39,37 @@ func WafStatus(c *gin.Context) {
 		configService.WafStatus(switchForm)
 		Success(c, "修改成功", nil)
 	}
+}
+
+//@Summary 查询waf开关
+//@Tags switch
+//@Produce json
+//@Param server_id query string true "服务器id"
+//@Success 200 {object} common.DataResponse true
+//@Response 400 common.DataResponse true
+//@Router /user/switch/waf [GET]
+func GetWafStatus(c *gin.Context) {
+	var user common.User
+	session := c.MustGet("session").(jwt.MapClaims)
+	user = session["user"].(common.User)
+	form := common.GetWafStatusForm{}
+	err := c.BindQuery(&form)
+	if OnJSONError(c, err) {
+		return
+	}
+	err = form.Validate()
+	if OnValidateError(c, err) {
+		return
+	}
+	if !serverService.Own(user.ID, form.ServerID) {
+		Failure(c, "越权操作", nil)
+	} else {
+		val := configService.GetWafStatus(form)
+		Success(c, "查询成功", gin.H{
+			"waf_status": val,
+		})
+	}
+
 }
 
 //@Summary 修改Server Switch或者URI Switch
