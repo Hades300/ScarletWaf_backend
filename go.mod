@@ -13,7 +13,6 @@ require (
 	github.com/go-ozzo/ozzo-validation/v4 v4.1.0
 	github.com/go-sql-driver/mysql v1.4.1
 	github.com/gomodule/redigo v2.0.0+incompatible
-	github.com/gorilla/websocket v1.4.0
 	github.com/jinzhu/gorm v1.9.12
 	github.com/mailru/easyjson v0.7.1 // indirect
 	github.com/nicksnyder/go-i18n/v2 v2.0.3

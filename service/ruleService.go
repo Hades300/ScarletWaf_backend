@@ -116,7 +116,7 @@ func (r *RuleService) Add(rules []common.Rule) error {
 		case "CUSTOM":
 			key = tool.CustomRuleKeyGen(rule.Host, rule.URI, rule.Type)
 		}
-		conn.Send("zadd", key, rule.Content)
+		conn.Send("zadd", key, 0, rule.Content)
 	}
 	conn.Flush()
 	_, err := redis.Int(conn.Receive())

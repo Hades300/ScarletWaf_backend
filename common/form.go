@@ -167,3 +167,21 @@ func (g GetWafStatusForm) Validate() error {
 		validation.Field(&g.ServerID, validation.Required.Error("必须声明服务器ID")),
 	)
 }
+
+type RuleListForm struct {
+	ServerID uint   `json:"server_id"`
+	URIID    uint   `json:"uri_id"`
+	Content  string `json:"content"`
+	Type     string `json:"type"`
+}
+
+func (r *RuleListForm) Format() {
+	r.Type = strings.TrimSpace(strings.ToUpper(r.Type))
+}
+
+func (r RuleListForm) Validate() error {
+	return validation.ValidateStruct(&r,
+		validation.Field(&r.ServerID, validation.Required.Error("必须声明服务器ID")),
+		validation.Field(&r.Type, validation.Required.Error("规则类型是必须声明的"), validation.In("GET", "POST", "COOKIE", "HEADER", "UA", "BLACKIP", "WHITEIP").Error("必须是GET POST COOKIE HEADER UA BLACKIP WHITEIP 之一")),
+	)
+}

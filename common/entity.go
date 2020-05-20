@@ -36,7 +36,7 @@ type URI struct {
 	Path     string       `json:"path"`
 	Host     string       `json:"host"`
 	ServerID uint         `json:"server_id"`
-	Switch   CustomSwitch `json:"-" gorm:"-"`
+	Switch   CustomSwitch `json:"switch" gorm:"-"`
 	Option   Option       `gorm:"-" json:"-"`
 }
 

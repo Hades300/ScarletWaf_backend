@@ -94,11 +94,27 @@ func GetURI(c *gin.Context) {
 		return
 	}
 	if serverService.Own(user.ID, form.ServerID) {
-		uris := uriService.GetByServerID(form.ServerID)
+		uris := uriService.GetByServerIDWithSwitch(form.ServerID)
 		Success(c, "获取成功", uris)
 		return
 	} else {
 		Failure(c, "越权操作", nil)
 		return
 	}
+}
+
+/**
+对给定服务器进行简单扫描 自动添加URI
+*/
+
+func ScanURI(c *gin.Context) {
+
+}
+
+/**
+根据目录特征+报错页面特征 生成指纹
+给此服务打tag
+*/
+func ScanFingerPrint(c *gin.Context) {
+
 }
