@@ -74,7 +74,7 @@ type BaseSwitch struct {
 
 type CustomSwitch struct {
 	IpBlacklist   bool `json:"ip_blacklist" redis:"ip_blacklist"`
-	IpWhitelist   bool `json:"ip_whitelist" redis:"ip_white_list"`
+	IpWhitelist   bool `json:"ip_whitelist" redis:"ip_whitelist"`
 	GetArgsCheck  bool `json:"get_args_check" redis:"get_args_check"`
 	PostArgsCheck bool `json:"post_args_check" redis:"post_args_check"`
 	CookieCheck   bool `json:"cookie_check" redis:"cookie_check"`
